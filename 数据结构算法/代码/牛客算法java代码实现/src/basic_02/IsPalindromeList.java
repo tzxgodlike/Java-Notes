@@ -55,9 +55,9 @@ public class IsPalindromeList {
         Node n3 = null;
         while(n2!=null){ //右边逆序 right convert
             n3 = n2.next;
-            n2.next =n1;
+            n2.next =n1;     //右半逆序后末尾指向左半的末尾
             n1 = n2;
-            n2 = n3;     //最后一个点为n1
+            n2 = n3;     //最后一个点为n1 n2此时为null
         }
         n3 = n1;   //保存最右的点
         n2 =head;
