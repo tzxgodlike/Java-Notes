@@ -2,6 +2,9 @@ package basic_02;
 
 import java.util.Stack;
 
+/*
+    是否回文
+ */
 public class IsPalindromeList {
     public static class Node{
         public int value;
