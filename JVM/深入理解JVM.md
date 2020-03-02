@@ -1,3 +1,5 @@
+你的代码中需要用到这个类的时候，就会将其加载到jvm中
+
 # JAVA介绍
     1.口号 write once,run anywhere.
 
