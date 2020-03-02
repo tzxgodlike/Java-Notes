@@ -19,7 +19,7 @@ public class Print_All_Permutations {
             process1(chs, i + 1);
             //这里不用回溯 因为第一种决策是自己与自己换
             //相当于决策树上父与左孩子一样
-            //swap(chs, i, j);
+            swap(chs, i, j);
         }
     }
 
