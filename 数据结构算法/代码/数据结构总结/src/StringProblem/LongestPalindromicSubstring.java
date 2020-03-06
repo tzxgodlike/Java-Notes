@@ -6,7 +6,7 @@ public class LongestPalindromicSubstring {
      */
 
     /*
-    DP
+    DP 状态转移方程中两端都需要移动 所以需要两个变量ij dp数组为二维数组
     P(i,j) = P(i+1,j-1)&&(si==sj)
     p(i,i) = true P(i,i+1) = (si==sj)
      */
