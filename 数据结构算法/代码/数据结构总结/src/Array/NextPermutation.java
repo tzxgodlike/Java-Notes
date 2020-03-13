@@ -23,11 +23,12 @@ public class NextPermutation {
         int i = nums.length-2;
         int j = nums.length-1;
         int k = nums.length-1;
-        //找到第一个升序的相邻对
+        //找到第一个升序的相邻对 升序就说明后面一定有数可以与i交换 使得变大
         while (i>=0&&nums[i]>nums[j]) {
             i--;
             j--;
         }
+        //i右边有数比i大且右边为降序 所以右边第一个比i大的数就是尽可能小的大数
         if(i>=0){
             while (k>i&&nums[k]<=nums[i]) {
                 k--;
@@ -37,7 +38,7 @@ public class NextPermutation {
             nums[i] = temp;
         }
 
-        //把i之后的逆置
+        //把i之后的逆置 i右边的还是为降序 所以逆置就行 交换首尾
         int left = j;
         int right = nums.length-1;
         while (left<right){

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class LongestIncreasingSubsequence {
     /*
-    最长上升子序列 leetcode.300
+    最长上升子序列 leetcode.300  没有要求是连续的
      */
     public static int lengthOfLIS(int[] nums) {
         int len = nums.length;

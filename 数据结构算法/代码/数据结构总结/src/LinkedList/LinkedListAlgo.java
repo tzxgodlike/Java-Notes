@@ -106,24 +106,28 @@ public class LinkedListAlgo {
     * 删除倒数第K个节点
     * */
     public static Node deleteLastKth(Node head,int k) {
-        Node p,q = null;
-        p = head;
+        Node dummy = new Node(-1,null);
+        dummy.next = head;
+        Node p,q;
+        p = dummy;
         int i = 1;
-        while (p!=null&&i<k) {
+        //为了解决head为null 或者删除自己的情况 设置一个dummy头节点
+        //i<=k这里的边界条件要测试 不需要pre节点记录 遍历到q为倒数第k+1个点
+        while (p!=null&&i<=k) {
             p = p.next;
             i++;
-        }
-        if (p == null) return head;
-        q= head;
-        Node pre = null;
-        //删除一个节点 要找到它前一个节点 记为pre
+        }//此时P在第n个节点上
+        //if (p==null) return head;
+        q = dummy;
+        //ListNode pre = null;  //用一个pre保存被删除节点的前一个节点
         while (p.next!=null) {
-            p = p.next;
-            pre = q;
+            //pre = q;
             q = q.next;
+            p = p.next;
         }
-        pre.next = pre.next.next;
-        return head;
+        //开始删除q
+        q.next = q.next.next;
+        return dummy.next;
     }
 
     /*

@@ -37,7 +37,7 @@ public class TwoSum {
         HashMap<Integer,Integer> map = new HashMap<>();
         for (int i = 0;i < nums.length;i++) {
             int temp = target - nums[i];
-
+            //遍历到2时，7还不在 遍历到7时 2肯定在了
             if (map.containsKey(temp)) {
                 return new int[]{i,map.get(temp)};
             }

@@ -2,6 +2,7 @@ package StringProblem;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class LongestSubstringWithoutRepeatingCharacters {
     /*
@@ -10,6 +11,27 @@ public class LongestSubstringWithoutRepeatingCharacters {
     /*
     1.暴力法
      */
+    public int lengthOfLongestSubstringBF(String s) {
+        int n = s.length();
+        int ans = 0;
+        for (int i = 0;i<n;i++) {
+            for (int j = i+1;j<=n;j++){
+                //
+                if (allUnique(s,i,j)) ans = Math.max(ans,j-i);
+            }
+        }
+        return ans;
+    }
+
+    public boolean allUnique(String s, int start, int end) {
+        Set<Character> set = new HashSet<>();
+        for (int i = start;i<end;i++) {
+            char c = s.charAt(i);
+            if (set.contains(c)) return false;
+            set.add(c);
+        }
+        return true;
+    }
     /*
     2.滑动窗口 左开右闭 其实就是以i开头，一位位往后滑，直到遇到重复的 就记录之前的长度 然后i是0~n-1
      */
@@ -39,14 +61,17 @@ public class LongestSubstringWithoutRepeatingCharacters {
         int len = ch.length;
         int max = 0;
         HashMap<Character,Integer> map = new HashMap<>();
-        int i=0,j = 0;
+        //int i=0,j = 0;
         //map保存每个字符的最右下标
-        while (i<len&&j<len) {
+
+        for (int i=0,j=0;j<len;j++){
             if (map.containsKey(ch[j])){
-                i = Math.max(map.get(ch[j]),max);
+                i = Math.max(map.get(ch[j]),i);
             }
             max = Math.max(max, j - i + 1);
-            map.put(ch[j],j);
+            map.put(ch[j],j+1);
+            //若此处是map.put(ch[j],j);那么有重复走到if (map.containsKey(ch[j]))时
+            //i = Math.max(map.get(ch[j])+1,i) 因为i要移动到重复位置的下一位
         }
         return max;
     }

@@ -33,6 +33,8 @@ public class ThreeSum {
 //    若和大于 00，说明 nums[R]nums[R] 太大，RR 左移
 //    若和小于 00，说明 nums[L]nums[L] 太小，LL 右移
 
+
+    // 难点之一在去重
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> ans = new ArrayList<>();
         int len = nums.length;

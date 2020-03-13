@@ -14,7 +14,7 @@ public class IsBSTAndCBT {
             this.value = data;
         }
     }
-
+    //判断搜索二叉树 中序遍历是有序的 那就用一个pre记录中序遍历前一个被打印的值 与每次被打印的值比较
     public static boolean inOrderUnRecur(Node head) {
         System.out.print("in-order");
         int pre = Integer.MIN_VALUE;

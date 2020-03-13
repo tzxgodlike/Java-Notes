@@ -6,7 +6,7 @@ public class MaximumProductSubarray {
      */
     /*
     遍历数组时计算当前最大值，不断更新
-    令imax为当前最大值，则当前最大值为 imax = max(imax * nums[i], nums[i])
+    令imax为当前最大值，则以当前num[i]为末尾的子串最大值为 imax = max(imax * nums[i], nums[i])
     由于存在负数，那么会导致最大的变最小的，最小的变最大的。因此还需要维护当前最小值imin，imin = min(imin * nums[i], nums[i])
     当负数出现时则imax与imin进行交换再进行下一步计算
     时间复杂度：O(n)O(n)

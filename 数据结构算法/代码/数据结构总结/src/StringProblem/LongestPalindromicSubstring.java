@@ -6,7 +6,7 @@ public class LongestPalindromicSubstring {
      */
 
     /*
-    DP 状态转移方程中两端都需要移动 所以需要两个变量ij dp数组为二维数组
+    1.DP 状态转移方程中两端都需要移动 所以需要两个变量ij dp数组为二维数组
     P(i,j) = P(i+1,j-1)&&(si==sj)
     p(i,i) = true P(i,i+1) = (si==sj)
      */
@@ -48,6 +48,10 @@ public class LongestPalindromicSubstring {
         System.out.println(res);
         return res;
     }
+
+    /*
+    2.中心扩展算法
+     */
 
     public static void main(String[] args) {
         String res =longestPalindromicSubstring("abcasdcabcbacyuiiu");

@@ -2,6 +2,7 @@ package basic_02;
 
 import java.util.HashMap;
 
+//复制含有随机指针节点的链表
 public class CopyListWithRandom {
     public static class Node {
         public int value;
@@ -51,6 +52,7 @@ public class CopyListWithRandom {
         while(cur!=null){
             next = cur.next.next;
             //curCopy =cur.next;
+            //若1.rand=2 那么1'.rand=2'[即2.next为2']
             cur.next.rand = cur.rand!=null?cur.rand.next:null;
             cur = cur.next.next;
         }

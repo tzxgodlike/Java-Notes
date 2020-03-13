@@ -2,6 +2,7 @@ package basic_02;
 
 import java.util.HashSet;
 
+//找相交节点
 public class FindFirstIntersectNode {
 
     public static class Node {

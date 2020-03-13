@@ -29,7 +29,7 @@ public class QuickSort {
             if (arr[cur]>arr[r]) {
                 swap(arr,cur,--more);
             }else if (arr[cur]<arr[r]) {
-                swap(arr,++less,cur++);
+                swap(arr,++less,cur++); //和等于区的第一个交换
             }else {
                 cur++;
             }
