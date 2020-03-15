@@ -133,6 +133,7 @@ public class BestTimeSellStock {
     dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
      */
     public static int maxProfit2DP(int[] prices) {
+        if(prices==null||prices.length==0) return 0;
         int len = prices.length;
         int[][] dp = new int[len][2];
         dp[0][0] = 0;
@@ -145,8 +146,81 @@ public class BestTimeSellStock {
     }
 
     /*
-    情况3：最多完成两笔交易
+    情况3：k为正无穷 且有sell之后要等一天
+    dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+    dp[i][1] = max(dp[i-1][1], dp[i-2][0] - prices[i])
      */
+    public static int maxProfit3DP(int[] prices) {
+        if(prices==null||prices.length==0) return 0;
+        int len = prices.length;
+        //因为只需要保存dp相邻状态 所以两个变量就行 不需要数组
+        int dp_i_0 = 0,dp_i_1 = Integer.MIN_VALUE; //dp[i-1][0],dp[i-1][1]的初值
+        int dp_pre_0 = 0;//dp[i-2][0]=0
+        //int[][] dp = new int[len][2];
+        for (int i = 0;i<len;i++) {
+            int temp = dp_i_0;
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1, dp_pre_0 - prices[i]);
+            dp_pre_0 = temp;
+        }
+        return dp_i_0;
+    }
+
+    /*
+    情况4 手续费
+     */
+    public static int maxProfit4DP(int[] prices,int fee) {
+        if(prices==null||prices.length==0) return 0;
+        int len = prices.length;
+        //因为只需要保存dp相邻状态 所以两个变量就行 不需要数组
+        int dp_i_0 = 0,dp_i_1 = Integer.MIN_VALUE; //dp[i-1][0],dp[i-1][1]的初值
+        int dp_pre_0 = 0;//dp[i-2][0]=0
+        //int[][] dp = new int[len][2];
+        for (int i = 0;i<len;i++) {
+            int temp = dp_i_0;
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1, dp_pre_0 - prices[i]-fee);
+            dp_pre_0 = temp;
+        }
+        return dp_i_0;
+    }
+
+
+    /*
+    情况5 ：k=任意整数 最多完成n笔交易
+    还记得前面总结的「穷举框架」吗？就是说我们必须穷举所有状态。其实我们之前的解法，都在穷举所有状态，\
+    只是之前的题目中 k 都被化简掉了。这道题由于没有消掉 k 的影响，所以必须要对 k 进行穷举：
+     */
+    public static int maxProfit5DP(int[] prices,int max_k) {
+        if(prices==null||prices.length==0) return 0;
+        int n = prices.length;
+        if (max_k > n / 2)     //k比n/2还大 说明K为正无穷
+            return maxProfit3DP(prices);
+
+        int[][][] dp = new int[n][max_k + 1][2];
+        for (int i = 0; i < n; i++)
+            for (int k = max_k; k >= 1; k--) {
+                if (i - 1 == -1) {
+                    /* 处理 base case
+                     * dp[i-1][k][0] = 0
+                      *dp[i-1][k][1] + prices[i] = -infinity
+                      *
+                      *
+                      * */
+                    //dp[i-1][k-1][0] =
+                    dp[i][k][0] = 0;
+                    dp[i][k][1] = -prices[i];
+                    continue;
+                }
+                dp[i][k][0] = Math.max(dp[i-1][k][0], dp[i-1][k][1] + prices[i]);
+                dp[i][k][1] = Math.max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i]);
+            }
+        return dp[n - 1][max_k][0];
+
+    }
+
+
+
     public static int maxProfit3(int[] prices) {
         if(prices==null||prices.length==0) return 0;
         int valley = prices[0];
