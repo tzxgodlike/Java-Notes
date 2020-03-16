@@ -1,3 +1,18 @@
+## ThreadLocal
+    1.应用场景 需要一个static做全局变量 但是多线程下不同的线程会修改
+    该变量 所以需要每个线程都拥有自己的该变量 所以把该变量放入ThreadLocal
+    对象中
+    2.在每个线程Thread内部有一个ThreadLocal.ThreadLocalMap类型的成员变量
+    t.threadLocals，这个threadLocals就是用来存储实际的变量副本的，键值为当前
+    ThreadLocal变量，value为变量副本（即要保存的变量）。
+    意思就是，每个线程都有自己单独的容器来保存变量，键值为ThreadLocal变量名，
+    这样可以一个线程可以有多个ThreadLocal变量被保存 先ThreadLocal.set(ob)
+    保存一个ob  再ThreadLocal.get() 实际上是t.threadLocals.get(threadLocal)
+    得到ob
+    3.用完之后要remove 因为线程在线程池中会复用 避免之前保存了变量
+    4.ThreadLocal变量一般被static修饰
+
+
 # synchronized 
 
  1.monitor(锁对象)
@@ -28,7 +43,23 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
 
 # 生产者消费者 
     用wait notify来实现
+    blockingqueue 会阻塞当前线程
+# 死锁条件
+互斥条件：一个资源每次只能被一个进程使用，即在一段时间内某 资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。
+
+请求与保持条件：进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源 已被其他进程占有，此时请求进程被阻塞，但对自己已获得的资源保持不放。
+
+不可剥夺条件:进程所获得的资源在未使用完毕之前，不能被其他进程强行夺走，即只能 由获得该资源的进程自己来释放（只能是主动释放)。
+
+循环等待条件: 若干进程间形成首尾相接循环等待资源的关系
+
 # park unpark
+    1.LockSupport中的方法
+    2.先 park 再 unpark   
+// 暂停当前线程 LockSupport.park(); 
+ 
+// 恢复某个线程的运行 LockSupport.unpark(暂停线程对象)
+
 
 # 线程状态转化
     new runnable blocked waiting timed_waiting terminated
@@ -66,7 +97,7 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
     可见性 - 保证指令不会受 cpu 缓存的影响 
     有序性 - 保证指令不会受 cpu 指令并行优化的影响
 
-# 可见性
+# 可见性 volatile关键字
     1.退不出的循环  main线程修改run变量对t线程不可见
         1.初始状态， t 线程刚开始从主内存读取了 run 的值到工作内存。
         2.因为 t 线程要频繁从主内存中读取 run 的值，JIT 编译器会将 run 的值
