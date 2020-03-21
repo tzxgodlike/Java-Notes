@@ -2,7 +2,7 @@ package other;
 
 public class MaximumSubarray {
     /*
-    leetcode.53
+    leetcode.53 最大子序和
 
 
     1.DP

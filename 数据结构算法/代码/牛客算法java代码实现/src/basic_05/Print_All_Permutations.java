@@ -53,8 +53,8 @@ public class Print_All_Permutations {
         String test1 = "abcd";
         printAllPermutations1(test1);
         System.out.println("======");
-        printAllPermutations2(test1);
-        System.out.println("======");
+        //printAllPermutations2(test1);
+        //System.out.println("======");
 
         String test2 = "acc";
         //printAllPermutations1(test2);

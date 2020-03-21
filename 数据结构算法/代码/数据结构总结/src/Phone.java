@@ -46,7 +46,7 @@ public class Phone {
                 set.add(num[j]);
                 swap(num, i, j);
                 process(num, i + 1);
-                //swap(num, i, j);
+                swap(num, i, j);
             }
         }
     }
@@ -58,7 +58,7 @@ public class Phone {
     }
 
     public static void main(String[] args) {
-        int[] n = {6,7,1,8,2,1,5,2,3,9,1};
+        int[] n = {1,3,9,5,6,7};
 
         int num = PhonePermutations(n);
         System.out.println(num);

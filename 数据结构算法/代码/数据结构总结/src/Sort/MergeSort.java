@@ -17,6 +17,7 @@ public class MergeSort {
     }
     public static void sortProcess(int[] arr,int l,int r) {
         if (l==r) return ;
+        // //这里要两层括号 不然+l会失效
         int mid = l + ((r - l) >> 1);
         sortProcess(arr,l,mid);
         sortProcess(arr,mid+1,r);
