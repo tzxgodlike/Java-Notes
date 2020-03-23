@@ -1,3 +1,5 @@
+package Chapter2;
+
 public class FindIn2DArray_04 {
     /**
      * 更推荐的做法，由于矩阵从上到下递增，从左到右递增。

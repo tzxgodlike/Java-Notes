@@ -1,3 +1,5 @@
+package Chapter2;
+
 public class DuplicationInArray_03_02 {
     /*
     * 在长度为n+1的数组中 所有数字范围为1-n 所以至少有一个数字

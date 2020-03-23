@@ -1,3 +1,5 @@
+package Chapter2;
+
 public class ReplaceSpace_05 {
     /**
      * 遍历每一个字符，如果是空格就使用Java库函数replace替换

@@ -1,3 +1,5 @@
+package Chapter2;
+
 import java.util.LinkedList;
 
 public class FromTail2Head_06 {
