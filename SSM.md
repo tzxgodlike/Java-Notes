@@ -7,6 +7,21 @@
     1.在bean.xml中设置要扫描注解的包
     2.@Component 把当前类创建一个对象加入容器中 并用value属性设置对象的Id（即map的key）
     3.根据使用层的不同 又分为@Service @Controller @Repository
+
+        1.@Controller
+        在对应的方法上，视图解析器可以解析return 的jsp,html页面，并且跳转到相应页面
+        若返回json等内容到页面，则需要加@ResponseBody注解
+
+        @RestController = @Controller + @ResponseBody
+
+        2.@Service 
+        服务（注入dao）
+
+        3.@repository
+        @repository dao（实现dao访问）
+
+
+
     4.@AutoWired 按类型自动注入 如果容器中有多个该类型 再找id为变量名称的
     对象注入 
 4.@Bean 把当前方法的返回值创建对象加入容器 key默认是当前方法的名称
@@ -114,6 +129,14 @@ class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   <pro
         proxy.save();
     }
 
+
+    8.
+        1.@RestController用于标注控制类，是一个组合注解相当于@Controller+@ResponseBody
+        其中[类]上添加注释@Controller请求方法时，返回的是方法返回值对应的html页面
+        当[方法]上加上@ResponseBody注释后，返回的是方法返回值的json格式或者文本格式
+        当控制类加上@RestController时相当于对[该类的每一个方法]加上了@ResponseBody注解，
+        该注释将方法返回的数据类型（基本类型，实体，封装信息）转成json或文本数据，具体如何展示交由前端处理
+
 ## springboot日志
 
     1.日志框架选择slf4j+logback
@@ -127,4 +150,5 @@ class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   <pro
             4.使用slf4j实现
         4.springboot能适配所有日志，底层实现了其他日志框架转化为slf4j 唯一需要做的
         就是在引入新框架时去掉默认的日志依赖[避免默认的日志包名和springboot的转换包名冲突，最新版本不需要去掉，因为转换包名变了]
-    3.指定配置 在类路径下面放配置文件 就不会使用日志的默认配置
+    3.指定配置 需要实现新功能 想自己设置日志配置 
+        可以在类路径下面放配置文件 就不会使用日志的默认配置

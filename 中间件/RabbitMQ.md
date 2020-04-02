@@ -8,6 +8,9 @@
 
 3.业务延迟处理
 
+4.登录成功写入日志
+    1.登录模块和日志模块异步
+
 项目代码
 
 C:\Users\Lenovo\IdeaProjects\itcast-rabbitmq
@@ -40,6 +43,9 @@ C:\Users\Lenovo\IdeaProjects\itcast-rabbitmq
         通过交换机可以练多个计算机上网]
 
         2.交换机类型  交换机只负责转发 不负责存储
+
+            一个交换机 多个队列 一个channel创建一个队列 一个队列可以绑定多个key 
+            
             1.广播 fanout
                 1.send创建了交换机 recv创建队列并绑定交换机 若先启动send 由于交换机不会存储
             消息，所以第一条消息会被丢弃 
