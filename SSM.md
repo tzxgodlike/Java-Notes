@@ -21,6 +21,8 @@
         @repository dao（实现dao访问）
 
 
+        @Value 是读取配置文件的值 
+
 
     4.@AutoWired 按类型自动注入 如果容器中有多个该类型 再找id为变量名称的
     对象注入 

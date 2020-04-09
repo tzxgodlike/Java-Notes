@@ -34,7 +34,7 @@ public class Print_All_Subsquences {
         if (index == nums.length) {
             System.out.println(temp);
             res.add(new ArrayList<>(temp)); //关键
-            //因为Java是值传递 而path这个变量在递归中只有一份 所以递归过程完成后，
+            //因为Java是值传递 而temp这个变量在递归中只有一份 所以递归过程完成后，
             //path由于回溯 变成空 所以主函数调用之后res都是空list 所以在添加时要拷贝一份副本
 
         }else {

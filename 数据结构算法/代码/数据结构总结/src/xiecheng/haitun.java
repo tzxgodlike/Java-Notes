@@ -3,6 +3,10 @@ package xiecheng;
 import java.util.Scanner;
 
 public class haitun {
+    /*
+    海豚活5岁  在2 4岁时会生孩子  这题是繁殖奶牛的变种 感觉不能递归
+    需要用一个ages[6]数组来表示每一年 岁数分别是0-6的海豚的数量
+     */
 
     public static int cowNumber1(int n){
         if(n<1){

@@ -13,7 +13,7 @@
     4.ThreadLocal变量一般被static修饰
 
 
-# synchronized 
+# synchronized   可以重入
 
  1.monitor(锁对象)
  每个Java对象都关联一个monitor
@@ -91,6 +91,29 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
         reentrantLock支持多个条件变量 不同condition的await对应相对的signal
         也得使用while循环再判断一次
 
+## Sychronized 和 reentrantlock区别
+
+    1.Sychronized是jvm层面   reentrantlock是API层面
+    
+    2.Sychronized不需要手动结束   reentrantlock需要unlock 释放
+
+    3.Sychronized不可以中断  除非抛出异常或者是正常完成
+
+      reentrantlock可中断 
+        1.设置超时方法 trylock
+        2.lockInterruptibly()放代码块中 调用interrupt方法可以中断
+
+    4.加锁是否公平
+        1.Sychronized 非公平锁
+        2.reentrantlock两者都可以 默认非公平锁
+    
+    5.绑定多个条件
+        1.Sychronized没有
+        2.reentrantlock绑定多个条件，可以精确唤醒 不像Sychronized要么随机唤醒一个 要么唤醒全部线程
+
+
+
+
 # JMM Java内存模型
     1.主存 工作内存
     2.多线程修改变量时 会把主存的变量拷贝会工作内存(栈空间) 工作内存是线程私有 只能通过主存来线程间通信
@@ -133,8 +156,21 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
     保证多线程的原子性
 
 # 无锁模式保护线程安全
+
     1.CAS 比较并设置 
-    AtomicInteger 的cas方法配合volatile关键字获取最新值 才能实现
+    AtomicInteger 的cas方法配合volatile关键字获取最新值 才能实现 如果CAS成功 就实现自增
+        public final int incrementAndGet() {
+        for (;;) {
+            int current = get();
+            int next = current + 1;
+            if (compareAndSet(current, next))
+                return next;
+        }
+    }
+
+    compareAndSet(current, next)  当current与于AtomicInteger中volatile修饰的value相等时  即旧值与当前的value相等时 才更新 不然一直自旋
+
+
     2.无锁效率比synchronized高
         因为cas失败后继续while循环 不会线程阻塞 不会上下文切换
     3.线程数太多了 效率也会变低
@@ -144,8 +180,10 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
     
 # JUC工具类
     1. AtomicInteger 有volatile修饰的value 用于修改账户不用锁
+
         1.AtomicInteger.compareAndSet(A,B)  A与value对比 若相同则更新为B
         2.简洁操作
+
     2.原子引用类型
         1.AtomicReference<T> a   
     3.ABA问题
@@ -243,6 +281,70 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
     当读操作远远高于写操作时，这时候使用 读写锁 让 读-读 可以并发，提高性能。 类似于数据库中的 select ... from ... lock in share mode
 
  
+
+## BlockingQueue  
+
+    1.Thread1--put-->BlockingQueue---take-->thread2
+
+        1.阻塞队列空时，take操作的线程会被阻塞
+        2.阻塞队列满时，put操作的线程被阻塞
+        3.之前 用的是synchronize和wait notify实现
+
+    2.BlockingQueue好处：不用关心什么时候需要阻塞线程，什么时候需要唤醒线程，BlockingQueue包办
+
+        1.换句话说 不用程序员来写wait和notify 
+
+    3. BlockingQueue接口的实现类
+
+        1.ArrayBlockingQueue  数组结构的有界阻塞队列
+        2.LinkedBlockingQueue  链表结构的有界[大小默认为21亿 Integer.MAX_VALUE]阻塞队列
+
+        3.SynchronousQueue  不存储元素的阻塞队列 即单个元素的队列
+
+            1.每一个put操作必须要等待一个take操作 否则不能继续添加
+            代码演示
+    
+    4.队列操作api
+
+        1. 抛出异常组 [不满足边界时抛出异常]
+            
+            1.插入 add 移除 remove 检查element [判断空不空 返回队首元素]
+
+        2. 返回布尔值 [不满足边界时 返回true或false]
+
+            1.插入 offer[true或false ] 移除 poll [元素或null] 查看 peek
+        
+        3. 阻塞
+
+            1.插入 put 满了会阻塞 
+            2.移除 take  空了会阻塞 
+        
+        4. 超时
+
+            1.offer(e,time,unit)  满了的话阻塞2s
+            2.poll(e,time,unit)   
+
+    5. 使用场景
+
+        1.生产者消费者模式 
+
+            1.传统版
+                1.sync wait notify
+                2.lock await signal
+            
+            2.口诀
+            
+                1.线程 操作(方法) 资源类   该变量就是资源类  操作应该为资源类自带
+
+                2.判断 干活 通知    wait方法都放在while循环里面
+
+                3.防止虚假唤醒机制  wait方法要用在while循环中
+
+            3.阻塞队列版本    D:\文档\后端学习之路\Java多线程\Java多线程代码\src\BlockingQueue
+
+                1.[MyResource中 构造器中参数都是传接口 不传类  为了适配]
+
+                2.不自己写wait notify 了  自己控制的只有 FLAG 是否开启生产
 
 
 

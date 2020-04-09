@@ -206,7 +206,43 @@ nowcoder
 //    }
 
 
+/*
+    大坑！！！ 先读整数 再读字符串 中间要用sc.nextLine()来清除一次\n
 
+    netx()函数从遇到的第一个有效的字符a开始扫描，直到遇到第一个[空格]扫描结束
+    nextLine()函数从空格开始扫描知直到遇到\n符结束
+    所以联合使用netx() nextLine()要慎重
+
+如果要求一次接受一个整数、浮点数和字符串？你会怎么做？？
+42
+3.1415
+Welcome to HackerRank Java tutorials!
+
+        public static void main(String[] args) {
+            Scanner sc=new Scanner(System.in);
+            int x=sc.nextInt();
+            double y=sc.nextDouble();
+            sc.nextLine();
+            //to flush the character \n left by method nextDouble()
+            String s= sc.nextLine();
+            System.out.println("String: "+s);
+            System.out.println("Double: "+y);
+            System.out.println("Int: "+x);
+
+        }
+        */
+
+
+
+/*
+用户的输入在计算机缓冲区中是这样存储的：42\n3.1415\nWelcome to HackerRank Java tutorials!\n
+使用nextInt()读取42结束，剩下\n3.1415\nWelcome to HackerRank Java
+使用nextDouble()读取3.1415，剩下\nWelcome to HackerRank Java
+如果此时直接用nextLine()读取，该函数遇到换行符\n就结束
+所以需要在这之前输入nextLine()，去掉缓冲区的\n，然后再读取
+这是由于nextLine()会读取\n之前的所有内容，并去除\n，而nextDouble()等曾不会去除它后面的\n
+
+ */
 
 
 

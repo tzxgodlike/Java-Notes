@@ -5,7 +5,8 @@ import java.util.Queue;
 
 public class SymmetricTree {
     /*
-    * leetcode.101 对称树  关键在于判断从第二层开始 逻辑是A B两树是否是镜像的
+    * leetcode.101 对称树  树和它的镜像一样 则对称
+     * 关键在于判断从第二层开始 逻辑是A B两树是否是镜像的
     * 而从根节点开始逻辑是 A树是否是镜像
     * */
     public static class Node {

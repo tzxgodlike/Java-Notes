@@ -6,7 +6,7 @@ import java.util.Queue;
 public class InvertBinaryTree {
 
     /*
-    * leetcode.226反转二叉树
+    * leetcode.226翻转二叉树 即求二叉树的镜像
     * 翻转一棵二叉树。         就是把每个结点的左右子树交换
 
 示例：
@@ -65,9 +65,13 @@ public class InvertBinaryTree {
     * */
     public Node invertBinaryTreeWithRec (Node head) {
         if (head == null) return null;
+
+        //AB 步骤可以交换
+        //A
         Node right = invertBinaryTreeWithRec(head.left);
         Node left = invertBinaryTreeWithRec(head.right);
 
+        //B
         head.right = left;
         head.left = right;
         return head;

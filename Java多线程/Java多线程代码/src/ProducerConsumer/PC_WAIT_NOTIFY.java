@@ -29,10 +29,11 @@ class MessageQueue {
                     e.printStackTrace();
                 }
             }
-            list.notify();
+
             //从队列头部获取消息
             Message m = list.removeFirst();
             System.out.println("已消费消息"+m);
+            list.notify();
             return m;
         }
     }
@@ -48,7 +49,7 @@ class MessageQueue {
                 }
             }
             list.addLast(message);
-            System.out.println("以生产消息"+message);
+            System.out.println("已生产消息"+message);
             list.notifyAll();
         }
     }
