@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -5,6 +6,97 @@ import java.util.Scanner;
 public class IOTemplate {
 
     public static void main(String[] args) {
+        /*
+        Collections 工具类
+
+        1.排序
+        void reverse(List list)//反转
+        void shuffle(List list)//随机排序
+        void sort(List list)//按自然排序的升序排序
+        void sort(List list, Comparator c)//定制排序，由Comparator控制排序逻辑
+        void swap(List list, int i , int j)//交换两个索引位置的元素
+        void rotate(List list, int distance)//旋转。当distance为正数时，
+        将list后distance个元素整体移到前面。当distance为负数时，将 list的前distance个元素整体移到后面。
+
+        2.查找 替换
+        int binarySearch(List list, Object key)//对List进行二分查找，返回索引，注意List必须是有序的
+        int max(Collection coll)//根据元素的自然顺序，返回最大的元素。 类比int min(Collection coll)
+        int max(Collection coll, Comparator c)//根据定制排序，返回最大元素，排序规则由Comparatator类控制。类比int min(Collection coll, Comparator c)
+        void fill(List list, Object obj)//用指定的元素代替指定list中的所有元素。
+        int frequency(Collection c, Object o)//统计元素出现次数
+        int indexOfSubList(List list, List target)//统计target在list中第一次出现的索引，找不到则返回-1，类比int lastIndexOfSubList(List source, list target).
+        boolean replaceAll(List list, Object oldVal, Object newVal), 用新元素替换旧元素
+
+
+        Arrays 工具类
+
+        排序 : sort()
+        查找 : binarySearch()
+        比较: equals()
+        填充 : fill()
+        转列表: asList()
+        转字符串 : toString()
+        复制: copyOf()
+
+            // *************复制 copy****************
+            // copyOf 方法实现数组复制,h为数组，6为复制的长度
+            int[] h = { 1, 2, 3, 3, 3, 3, 6, 6, 6, };
+            int i[] = Arrays.copyOf(h, 6);
+            System.out.println("Arrays.copyOf(h, 6);：");
+            // 输出结果：123333
+            for (int j : i) {
+                System.out.print(j);
+            }
+            // 换行
+            System.out.println();
+            // copyOfRange将指定数组的指定范围复制到新数组中
+            int j[] = Arrays.copyOfRange(h, 6, 11);
+            System.out.println("Arrays.copyOfRange(h, 6, 11)：");
+            // 输出结果66600(h数组只有9个元素这里是从索引6到索引11复制所以不足的就为0)
+            for (int j2 : j) {
+                System.out.print(j2);
+            }
+            // 换行
+            System.out.println();
+             */
+
+        /*
+    手写构建新的比较规则
+            Arrays.sort(people, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                // if the heights are equal, compare k-values
+                return o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0];
+            }
+        });
+
+
+        Arrays.sort(people, (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0]);
+     */
+
+
+        /*
+        字符串格式化
+         */
+        DecimalFormat df = new DecimalFormat("00");
+        int num= 0;
+        String sresH = df.format(num);
+        System.out.println(sresH);   //sresH为 “00”
+
+        /*
+        子串匹配
+         */
+        String parent = "aaaa";
+        int cnt = 0;
+        int index = 0;
+        String kid = "aa";
+        while ((index=parent.indexOf(kid,index))!=-1){
+            index = index + 1;
+            cnt++;
+        }
+        System.out.println(cnt);
+
+
         //Scanner in = new Scanner(System.in);
 //        while(in.hasNext()) {
 //            int a = in.nextInt();
@@ -271,6 +363,7 @@ Welcome to HackerRank Java tutorials!
 
         return number;
     }
+
 }
 
 

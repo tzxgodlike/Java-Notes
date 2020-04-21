@@ -2,6 +2,8 @@ package basic_03;
 
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 //先中后 - 遍历  递归
@@ -131,5 +133,20 @@ public class PreInPosTraversal {
         }
         System.out.println();
     }
+/*
+    层次遍历二叉树
+     */
 
+    public static void printTreeByLayer(Node head) {
+        if (head==null) return ;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(head);
+        while (!queue.isEmpty()) {
+            head = queue.poll();
+            System.out.println(head.value);
+            if (head.left!=null) queue.offer(head.left);
+            if (head.right!=null) queue.offer(head.right);
+        }
+    }
 }

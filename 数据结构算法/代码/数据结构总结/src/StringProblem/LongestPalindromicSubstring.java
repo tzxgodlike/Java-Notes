@@ -8,7 +8,7 @@ public class LongestPalindromicSubstring {
     /*
     1.DP 状态转移方程中两端都需要移动 所以需要两个变量ij dp数组为二维数组
     P(i,j) = P(i+1,j-1)&&(si==sj)
-    p(i,i) = true P(i,i+1) = (si==sj)
+    p(i,i) = true P(i,i+1) = (si==s(i+1))
      */
     public static String longestPalindromicSubstring(String str) {
         if (str == null || str.length() == 0) {

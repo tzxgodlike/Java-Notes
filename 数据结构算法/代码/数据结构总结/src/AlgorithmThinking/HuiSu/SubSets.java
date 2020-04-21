@@ -12,7 +12,7 @@ public class SubSets {
         return res;
     }
 
-    //1.回溯   每个结点都作为结果
+    //1.回溯   每个结点都作为结果  逻辑是先求个数为0的子集  再求个数为1的子集  再求.....
     public void backtrack (int index,int[] nums,List<Integer> temp) {
         //if (index > nums.length) return;
         res.add(new ArrayList<>(temp));

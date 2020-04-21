@@ -137,7 +137,8 @@ public class Print1ToMaxOfNDigits_17 {
     }
 
     public static void main(String[] args) {
-        printFrom1ToMaxOfNDigitRecur(2);
+        //printFrom1ToMaxOfNDigitRecur(2);
+        System.out.println(add("11","12"));
     }
 
 }

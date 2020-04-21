@@ -4,6 +4,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class LowestLexicography {
+
+    /*
+    给定一个字符串类型的数组strs，找到一种拼接方式，使得把所 有字 符串拼起来之后形成的字符串具有最低的字典序。
+    先构造一个比较器
+    策略1:strq1<=str2,str1放前面      错误
+    策略2:str1+str2<=str2+str1 str1+str2放前面    正确
+     */
     public static class MyComparator implements Comparator<String>{
         @Override
         public int compare(String a, String b) {

@@ -66,14 +66,44 @@ public class LongestSubstringWithoutRepeatingCharacters {
 
         for (int i=0,j=0;j<len;j++){
             if (map.containsKey(ch[j])){
-                i = Math.max(map.get(ch[j]),i);
+                i = Math.max(map.get(ch[j])+1,i);
             }
             max = Math.max(max, j - i + 1);
-            map.put(ch[j],j+1);
+            map.put(ch[j],j);
             //若此处是map.put(ch[j],j);那么有重复走到if (map.containsKey(ch[j]))时
             //i = Math.max(map.get(ch[j])+1,i) 因为i要移动到重复位置的下一位
         }
         return max;
     }
 
+    /*
+   剑指offer解法   跟滑动窗口优化解法一样
+
+   重点都是preIndex = Math.max(preIndex, position[str.charAt(i) - 'a']);
+    */
+    public static int  findLongestSubstring2(String str) {
+        int curLen = 0;
+        int maxLen = 0;
+        int preIndex = -1;
+        // 0~25表示a~z，position[0] = index,表明a上次出现在index处
+        int[] position = new int[26];
+        //用position数组来代替set
+
+
+        for (int i = 0; i < 26; i++) {
+            position[i] = -1;
+        }
+
+        for (int i = 0; i < str.length(); i++) {
+            //preIndex是str(i)上一次出现的index
+            preIndex = Math.max(preIndex, position[str.charAt(i) - 'a']);
+
+            //那么curLen是当前无重复子串的长度
+            curLen = i - preIndex;
+            // 记录当前字符出现的位置
+            position[str.charAt(i) - 'a'] = i;
+            maxLen = Math.max(curLen, maxLen);
+        }
+        return maxLen;
+    }
 }

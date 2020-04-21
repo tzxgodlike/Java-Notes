@@ -1,6 +1,13 @@
 package basic_05;
 
 public class Money_Problem {
+
+    /*
+     Money_Problem  换零钱问题
+    给你一个数组arr，和一个整数aim。如果可以任意选择arr中的 数字，能不能累加得到aim，返回true或者false
+    思路：
+        跟子序列一样 每个位置选择要还是不要
+     */
     public static boolean money1(int[] arr, int aim) {
         return process1(arr, 0, 0, aim);
     }

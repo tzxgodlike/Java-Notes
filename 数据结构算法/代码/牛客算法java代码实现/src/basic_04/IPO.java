@@ -5,6 +5,10 @@ import java.util.PriorityQueue;
 
 public class IPO {
 
+    /*
+    [IPO]一个项目有两个数组，cost[]成本和profit[]纯利润。
+    给初始资金，一次做一个项目，一个项目只能做一次。做K个项目，最多能有多少钱？
+     */
     public static class Node{
         public int p;
         public int c;
