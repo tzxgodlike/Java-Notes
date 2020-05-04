@@ -1,0 +1,29 @@
+
+
+## 传统方法问题分析
+
+ 问题分析
+1) 其他第三方接入气象站获取数据的问题 
+2) 无法在运行时动态的添加第三方 (新浪网站) 
+3) 违反ocp原则=>观察者模式
+
+// 在 WeatherData 中 ， 当增加一个第三方，都需要创建 一 个对应的第三方
+的公告板 对象，并加入到 dataChange, 不利于维护，也不是动态加入
+
+ public void dataChange() { 
+    currentConditions.update(getTemperature(), getPressure(), getHumidity()); 
+ }
+ 
+ 
+ 
+ ## 观察者模式
+    
+  观察者模式类似订牛奶业务 
+  1) 奶站/气象局：Subject 
+  2) 用户/第三方网站：Observer
+  
+  Subject：登记注册、移除和通知
+ 1) registerObserver 注册 
+ 2) removeObserver 移除 
+ 3) notifyObservers() 通知所有的注册的用户，根据不同需求，
+ 可以是更新数据，让用 户来取，也可能是实施推送，看具体需求定

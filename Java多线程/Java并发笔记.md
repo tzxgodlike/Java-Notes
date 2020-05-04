@@ -44,14 +44,29 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
 # 生产者消费者 
     用wait notify来实现
     blockingqueue 会阻塞当前线程
+
 # 死锁条件
-互斥条件：一个资源每次只能被一个进程使用，即在一段时间内某 资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。
+    1.
+        互斥条件：一个资源每次只能被一个进程使用，即在一段时间内某 资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。
 
-请求与保持条件：进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源 已被其他进程占有，此时请求进程被阻塞，但对自己已获得的资源保持不放。
+        请求与保持条件：进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源 已被其他进程占有，此时请求进程被阻塞，但对自己已获得的资源保持不放。
 
-不可剥夺条件:进程所获得的资源在未使用完毕之前，不能被其他进程强行夺走，即只能 由获得该资源的进程自己来释放（只能是主动释放)。
+        不可剥夺条件:进程所获得的资源在未使用完毕之前，不能被其他进程强行夺走，即只能 由获得该资源的进程自己来释放（只能是主动释放)。
 
-循环等待条件: 若干进程间形成首尾相接循环等待资源的关系
+        循环等待条件: 若干进程间形成首尾相接循环等待资源的关系
+    
+    2. 原因
+        1.系统资源不足
+        2.进程运行推进顺序不当
+        3.资源分配不当
+    
+    4.定位分析
+        D:\文档\后端学习之路\Java多线程\Java多线程代码\src\DeadLock
+
+        1.在IDEA的terminal中输入jps -l   找到进程编号 20324 DeadLock.DeadLockDemo
+
+        2.jstack 20324
+
 
 # park unpark
     1.LockSupport中的方法
@@ -64,7 +79,7 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
 # 线程状态转化
     new runnable blocked waiting timed_waiting terminated
 
-# 多把锁 
+
 
 # 活跃性
     1.死锁
@@ -202,15 +217,6 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
 
     待完成
 
-# 线程池
-    1.自定义线程池 
-        是一个生产者消费者模型 threadpool是消费者 task是生产者 
-        thread用worker类封装 线程池的线程执行完一个任务后会找队列中的任务
-        继续执行
-        当thread可用数量不够时，把task放入blockingqueue  blockingqueue和threadpool都需要线程加锁 
-        超时阻塞添加
-        当队列满时，把方法抽象出一个接口，不写死在线程池中，由调用者来决定
-        rejectpolicy
 
 
 
@@ -251,7 +257,7 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
             应用：put和get方法组合时，即使是concurrentHashMap也会出问题 所以关键在于这两个方法要成原子性
          Integer counter = map.get(word);            
          int newValue = counter == null ? 1 : counter + 1;            map.put(word, newValue); 
-        组合成一个方法
+        组合成一个方法 
         LongAdder value = map.computeIfAbsent(word, (key) -> new LongAdder())
         value.increment(); 
         LongAdder是累加器 value.increment()是自增1 
@@ -263,6 +269,9 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
             ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）
             synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。
     5.hashmap的并发问题
+
+        1. 多个put出现死循环
+
         jdk7 解决冲突时拉链法 新加入节点会加入链表头部
         https://coolshell.cn/articles/9606.html 死链  1.8已解决
         问题就在于 有两个线程要添加值 都出发了扩容 第一个线程完成扩容之后 链表的先后顺序发生了变化(因为是头插法)A-B变成B-A 而第二个线程中断前记录了A-B 所以移动A 之后 继续移动B 而B此时的后继是A 所以下一步又会移动A 造成了死循环A-B-A
@@ -270,6 +279,13 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
         1.8解决死链  是因为对 resize做了优化
         因为在 JDK1.7 中采取的是头插法，遍历一个节点就插入一个节点到新的哈希桶数组，所以才会导致出现循环链表。但 JDK1.8 中是采用**两个头结点来保持旧链表的引用，直到该索引处对应的链表全部遍历完之后再分别把头结点放在新的哈希桶数组对应的位置。**而不是遍历一个节点就插入一个节点到新的哈希桶数组。所以不会出现死链。
 
+        2.多线程的put导致元素的丢失
+
+            1.put操作会执行 p.next = newNode(hash, key, value, null);  A线程put进keyA后 B线程再put进keyB p.next会与keyA断开与keyB连接 导致keyA丢失
+
+        3. put和get并发时，可能导致get为null
+
+            1.线程1执行put时，因为元素个数超出threshold而导致rehash，会创建一个新的table，此时还未搬运元素，是空表。线程2此时执行get，得到null。
 
     6.blockingqueue
         当队列容器已满，生产者线程会被阻塞，直到队列未满；当队列容器为空时，消费者线程会被阻塞，直至队列非空时为止。
@@ -346,9 +362,125 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
 
                 2.不自己写wait notify 了  自己控制的只有 FLAG 是否开启生产
 
+## 使用多线程的四种方式 [123加线程池]
+
+    1.继承Thread类
+
+    2.实现runnable接口
+
+    3.实现callable<V>接口      D:\文档\后端学习之路\Java多线程\Java多线程代码\src\CallableDemo.java
+
+        1.带返回值 类型为V
+
+        2.会带有异常
+
+        3.构造方法
+            1.如何构造？ Thread类中并没有传callable接口的构造方法
+
+            2.适配器模式 若一个类实现了runnable接口和并和callable扯上关系 可以传入  [面向接口编程] 
+
+            3.RunnableFuture接口继承了runnable接口 FutureTask是RunnableFuture的一个实现类 它也实现了runnable接口
+            
+            同时FutureTask的有一个构造方法中传入了callable接口 
+
+        4.调用futureTask.get() 得到返回值
+    
+        5.适用场景
+
+            1.1000个线程 运行成功返回444 失败返回000 可以找出失败的
+
+            2.比方说 main线程要算4个任务 某个任务耗时很长 main线程就会新开一个线程去算这个任务 最后再用FutureTask.get()把结果总和 这个 FutureTask.get() 会阻塞
+
+            可以用一个自旋锁的思想 等FutureTask算完了 再执行主线程 while (!futureTask.isDone()) { 等待 }
+        
+        6. 一个futureTask只会算一次 把同一个futureTask放到两个线程中 不会重复计算 需要再new一个新的futureTask
 
 
 
+## 线程池
+    1.自定义线程池 
+        是一个生产者消费者模型 threadpool是消费者 task是生产者 
+        thread用worker类封装 线程池的线程执行完一个任务后会找队列中的任务
+        继续执行
+        当thread可用数量不够时，把task放入blockingqueue  blockingqueue和threadpool都需要线程加锁 
+        超时阻塞添加
+        当队列满时，把方法抽象出一个接口，不写死在线程池中，由调用者来决定
+        rejectpolicy
 
+    1.线程池的特点 
 
+        1. 线程复用  2.控制最大并发数  3.管理线程
+    
+    2.线程池的优点
+        
+        1.降低资源消耗 通过重复利用已创建的线程降低线程创建和销毁造成的消耗  [和spring思想类似 减少new对象带来的回收消耗]
+        2.提高响应速度 当任务到达时，不需要等待线程创建就能直接执行
+        3.提高线程的可管理性 线程是稀缺资源 如果无限制的创建 不仅会消耗系统资源 还会降低系统的稳定性 使用线程池可以进行统一的分配 调优和监控
+    
+    3. 接口Executor  工具类Executors  ExecutorService.execute()方法传入runnable来执行线程
+        由工具类Executors来生成线程池
 
+        1.一池5个处理线程
+        ExecutorService threadPool = Executors.newFixedThreadPool(5);  
+
+        2.一池1个处理线程
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+
+        3.一池N个处理线程 由任务数量来决定
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+
+    
+    4. Executors创建线程池的底层实现是由线程池实现类 ThreadPoolExecutor
+
+    5.七大参数
+
+        1.corePoolSize 常驻核心线程数
+
+            1.当线程池中的线程数目达到corePoolSize后，会把到达的任务放到缓存队列中去
+        
+        2.maximumPoolSize 线程池能够容纳同时执行的最大线程数 此值必须大于等于1
+
+            1.当缓存队列的任务放满之后，会创建救急线程 此时线程总数就是maximumPoolSize
+            
+            2.原缓存队列中的任务去救急线程 新来的线程去缓存队列
+        
+        3.keepAliveTime  多余的空闲线程的存活时间
+
+            1.创建救急线程之后，若空闲时间到达该值 则销毁到只剩下corePoolSize个数
+
+        4.TimeUnit unit   keepAliveTime的单位
+
+        5.workQueue 阻塞队列
+
+        6.threadFactory 线程工厂   用来创建线程 一般默认 
+
+        7.RejectedExectionHandler 拒绝策略  [maximumPoolSize都满了 使用拒绝策略]
+    
+    6.底层工作原理
+
+        1.任务提交进来，先看corePoolSize是否满 若满 再看缓存队列是否满 若满 再看线程池是否满 若满 按照拒绝策略执行
+
+        2.线程完成任务 会去队列中取
+    
+    7.拒绝策略
+
+        1.AbortPolicy[默认] 直接抛出异常阻止系统正常运行
+        2.CallerRunsPolicy 将某些任务回退到调用者   例如让main线程去执行 
+        3.DiscardOldestPolicy 抛弃队列中等待最久的任务 
+        4.DiscardPolicy 直接丢弃 不处理也不抛出异常
+    
+    8.工作中Executors提供的线程池 一个都不能用 必须使用自定义的
+
+        1.newFixedThreadPool和 newSingleThreadExecutor允许请求队列长度为Integer.MAX  会堆积大量请求 导致OOM
+
+        2.newCachedThreadPool 和SchedeledThreadPool 允许创建的线程数量为Integer.MAX 会创建大量的线程 导致OOM
+    
+    9. 线程池配置合理的线程数
+
+        1.CPU密集型 即该任务需要大量运算 没有阻塞 配置尽可能少的线程数量
+            公式：CPU核数 + 1个线程的线程池
+
+        2.IO密集型  即有大量阻塞  单线程会浪费时间在等待上
+            1.尽可能配置多 如CPU核数*2
+            2.参考公式 CPU核数/(1-阻塞系数)   阻塞系数一般为0.8-0.9
+    

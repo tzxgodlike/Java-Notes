@@ -25,5 +25,11 @@ public class TestStatic extends Father {
         t1.join();
         t2.start();
 
+
+        Integer t11= new Integer(10);
+        Integer t22= new Integer(10);
+
+        System.out.println(t11==t22);             //输出为false
+        System.out.println(t11.equals(t22));      //输出为true
     }
 }

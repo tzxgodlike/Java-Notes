@@ -60,6 +60,20 @@
 
         2.代理对象proxy直接在内存中生成字节码 没有经过.java文件这一步
 
-        3.$proxy0这个类是Proxy的子类 并实现了UserDao接口
+        3.$proxy0这个类是Proxy的子类 并实现了AToolFactory接口
+            1.tzxDynamic.getProxyInstance()生成了$proxy0这个类
+            2.这个类实现了AToolFactory接口 所以可以被强转为接口对象
+            
+        4. Proxy.newProxyInstance()参数是接口的一个实现类的加载器 和实现类的父接口 并在invoke中调用了userdao这个真实对象
+          
+                  所以它具备了
+                      1.实现真实对象的接口  2.包含了真实对象   
+                  这两个必备条件
     
-    3.
+    3. 写一个工具类 来查看$proxy0的类 需要用反编译工具查看
+    
+    4.Object result = method.invoke(userDao, args);的理解  [反射的思想]
+      
+        1.在InvocationHandler的invoke函数中 还并不知道proxy会调用哪个方法 所以
+          也就不知道被增强的方法是哪个 所以要用method把方法传进来 
+          method.invoke(userDao, args)这句等价于 userDao调用自身名为method，参数为args的方法
