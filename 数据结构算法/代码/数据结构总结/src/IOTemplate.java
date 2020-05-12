@@ -70,8 +70,22 @@ public class IOTemplate {
             }
         });
 
-
         Arrays.sort(people, (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0]);
+
+
+        int[]的比较器 要转化成Integer类才能进行比较
+        Integer[] newNum = new Integer[len];
+        for (int i = 0;i<len;i++) {
+            newNum[i] = m[i];
+        }
+        //Arrays.sort(m);
+        Arrays.sort(newNum, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+
      */
 
 

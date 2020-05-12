@@ -36,6 +36,8 @@ public class TwoSum {
     public int[] twoSum2(int[] nums, int target) {
         HashMap<Integer,Integer> map = new HashMap<>();
         for (int i = 0;i < nums.length;i++) {
+
+            //遍历数组 看A的差值B是否在map中
             int temp = target - nums[i];
             //遍历到2时，7还不在 遍历到7时 2肯定在了
             if (map.containsKey(temp)) {
