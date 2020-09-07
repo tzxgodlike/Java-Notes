@@ -1,7 +1,9 @@
 ## ThreadLocal
     1.应用场景 需要一个static做全局变量 但是多线程下不同的线程会修改
     该变量 所以需要每个线程都拥有自己的该变量 所以把该变量放入ThreadLocal
-    对象中
+    对象中 即每个线程都有该对象的独立拷贝
+    ThreadLocal具有线程隔离的效果，只有在线程内才能获取到对应的值，线程外则不能访问到想要的值。
+
     2.在每个线程Thread内部有一个ThreadLocal.ThreadLocalMap类型的成员变量
     t.threadLocals，这个threadLocals就是用来存储实际的变量副本的，键值为当前
     ThreadLocal变量，value为变量副本（即要保存的变量）。
@@ -483,4 +485,4 @@ JDK 中，join 的实现、Future 的实现，采用的就是此模式 因为要
         2.IO密集型  即有大量阻塞  单线程会浪费时间在等待上
             1.尽可能配置多 如CPU核数*2
             2.参考公式 CPU核数/(1-阻塞系数)   阻塞系数一般为0.8-0.9
-    
+   

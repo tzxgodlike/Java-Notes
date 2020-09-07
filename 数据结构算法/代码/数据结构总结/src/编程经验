@@ -1,0 +1,131 @@
+// 把一个map装入另一个map
+        Map<String, Integer> map1 = new HashMap<String, Integer>();
+        Map<String, Integer> map2 = new HashMap<String, Integer>();
+        map1.putAll(map2);
+
+        // 把set撞到list
+        Set<String> set1 = new HashSet<>();
+        ArrayList<String> keyList = new ArrayList<>();
+        keyList.addAll(set1);
+        // 获得一个范围内的随机数
+        Random r = new Random();
+        int n = r.nextInt(3);  // 获得0-2的随机数
+        System.out.println(n);
+
+        // List<int[]> res转int[][]为
+        List<int[]> res = new LinkedList<>();
+        int[][] res_a = res.toArray(new int[res.size()][]);
+
+        // list转int[]
+        List<Integer> res1 = new LinkedList<>();
+        int[] arr1 = res1.stream().mapToInt(k -> k).toArray();
+
+        // list对字符串拼接排序
+        List<Integer> list = new LinkedList<>();
+        list.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                return (a + "" + b).compareTo(b + "" + a);
+            }
+        });
+
+        // Collections交换元素
+        // Collections.swap(arraylist,0,1);
+
+        // 构建最大堆
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
+        
+        // 字符串大写转小写
+        String s = "ABCa";
+        String s1 = s.toLowerCase();
+        String s2 = s.toUpperCase();
+        System.out.println(s1);
+
+        // 字符串长度为s.length()
+
+        // 数字字符串转整数
+        String num = "232342";
+        System.out.println(Integer.parseInt(num));
+
+        // 两个字符串数字比较数值大小
+        String n1 = "123";
+        String n2 = "456";
+        System.out.println(n1.compareTo(n2));
+        
+        
+    构造树    
+ * https://blog.csdn.net/weixin_43444439/article/details/90604237
+
+
+1.字母易位词==排列
+    2.滑动窗口  见下面模板
+    
+    3.回溯其实就是 dfs ，两者没有太大的差别。dfs 用于搜索就叫回溯，搜索的时候强调使用一份变量去搜索所有的可能性，所以需要状态重置，由于要强调这个事情，所以叫回溯。
+      
+    4. List<int[]> res转int[][]为
+       res.toArray(new int[res.size()][])
+    
+    5.Java类变量可以不初始化赋值 有默认值；但局部变量必须初始化
+        str:null
+        int:0
+        char:
+        short:0
+        f:0.0
+        lo:0
+        dou:0.0
+        byte:0
+        flag:false
+        obj:null
+    
+    6. 二进制转十进制 
+        1.如果是一个数组保存了二进制的每位 可以用
+        res = res << 1;
+        res = res + num[i];
+        来实现
+    
+    7.不进位的的加法就是异或运算
+    
+    8.dfs的时候 如果要把一个结果传出来 不一定要通过函数返回值 
+    可能会打乱函数dfs的结构 可以在参数传一个大小为0的int数组 
+    这样结果存在里面可以在dfs最外面拿到
+    
+待学习 1.股票利润
+    2.打家劫舍
+    3.Netty
+    
+    
+## 滑动窗口
+https://leetcode-cn.com/problems/minimum-window-substring/solution/hua-dong-chuang-kou-suan-fa-tong-yong-si-xiang-by-/
+/* 滑动窗口算法框架 */
+void slidingWindow(string s, string t) {
+    unordered_map<char, int> need, window;
+    for (char c : t) need[c]++;
+    int left = 0, right = 0;
+    int valid = 0; 
+    while (right < s.size()) {
+        // c 是将移入窗口的字符
+        char c = s[right];
+        // 右移窗口
+        right++;
+        // 进行窗口内数据的一系列更新
+        //注意window中put的应该是need中存在的字符
+        ...
+        /*** debug 输出的位置 ***/
+        printf("window: [%d, %d)\n", left, right);
+        /********************/
+        // 判断左侧窗口是否要收缩
+        while (window needs shrink) {
+            // d 是将移出窗口的字符
+            char d = s[left];
+            // 左移窗口
+            left++;
+            // 进行窗口内数据的一系列更新
+            ...
+        }
+    }
+}
+
+leetcode76 最小覆盖子串
+LeetCode567 字符串排列
+leetcode438 找所有字母异位词
+LeetCode3 最长无重复子串

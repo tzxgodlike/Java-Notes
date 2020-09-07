@@ -39,4 +39,20 @@ public class Power_16 {
         }
         return result;
     }
+
+    /*
+    快速幂
+     */
+    public double myPow(double x, int n) {
+
+        double res = 1;
+        while (n>0) {
+            //n为奇数 一共会执行这语句两次 最后n==1时总会执行一次
+            if ((n&0x01)==1)  res *=x;
+            x *= x;
+            n = n>>1;
+        }
+
+        return res;
+    }
 }

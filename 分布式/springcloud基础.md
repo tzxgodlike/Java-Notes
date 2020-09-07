@@ -75,6 +75,7 @@
     1.建module
     2.改pom
     3.写yml
+        1.层次缩进和空格 两者都不能少
     4.主启动
     5.业务类
         1.建表SQL
@@ -148,7 +149,7 @@
     1.Port设置为80 因为80是默认的 顾客访问时不需要加端口号
     2.订单模块只有controller层 调用支付模块的dao service层
     3.创建相同的实体类 entities
-    4.restTemplate提供多重便捷访问远程HTTP服务的方法  使用(url,requestMap,ResponseBean.class)代表rest请求地址 请求参数 HTTP响应转换被转换的对象
+    4.restTemplate提供多重便捷访问远程HTTP服务的方法  使用(url,requestMap,ResponseBean.class)代表[rest请求地址] [请求参数] [HTTP响应转换被转换的对象]
     5.config类  @Configuration
          @Configuration用于定义配置类，可替换xml配置文件，被注解的类内部包含有一个或多个被@Bean注解的方法，这些方法将会被AnnotationConfigApplicationContext或AnnotationConfigWebApplicationContext类进行扫描，并用于构建bean定义，初始化Spring容器。
     6.弹幕说@LoadBalance这个注解加入注册中心时 80访问url改成服务名时 一定要加
@@ -164,5 +165,5 @@
     3.cn.hutool
     4.删除各自模块的实体类
     5. mvn clean再install 然后在模块的pom中引用该依赖
-    6.
+    
 

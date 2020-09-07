@@ -19,6 +19,7 @@
     1.工作步骤
         1.先选择EurekaServer，它优先选择同一个区域内负载较少的server
         2.根据用户指定的策略，在从server取到的服务注册列表中选择一个地址
+        3.之前要确定找8001还是8002 现在只需要找服务名称
     
     2.pom中eureka-clinet依赖包中已经有ribbon 所以不需要再次引用
 
@@ -34,7 +35,8 @@
             2.如何替换
         
         2.
-            1.
+            1.cloud-consumer-order80
+
             Springboot主启动类的@SpringBootApplication中有@ComponentScan 所以会扫描com.tzx.springcloud下的所有包
             官方文档明确给出了警告：
             这个自定义配置类不能放在 @CommpomentScan 所扫描的当前包下以及子包下，
@@ -66,7 +68,8 @@
             2.com.tzx.springcloud.config.ApplicationContextConfig中restTemplate去掉@LoadBalance 保证使用的负载均衡是自己写的
             3.创建接口LoadBanlancer 方法 实现类MyLB 不要忘了加@@Component 把类对象加入容器
             4.实现一个自增器 并通过DiscoveryClient的serviceinstance来获取要去访问的服务是哪个
-            5.return restTemplate.getForObject(PAYMENT_URL+"/payment/get/"+id,CommonResult.class); 去获取8001的serverPort
+            5.getPaymentLB 
+                return restTemplate.getForObject(PAYMENT_URL+"/payment/get/"+id,CommonResult.class); 去获取8001的serverPort
             6.注意：
                 @Component加入容器后 使用时不要忘了@Resource或者@AutoWired注入
 

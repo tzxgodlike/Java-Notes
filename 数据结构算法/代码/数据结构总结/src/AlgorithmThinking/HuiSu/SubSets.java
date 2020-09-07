@@ -43,6 +43,8 @@ public class SubSets {
 
     public static void main(String[] args) {
         int[] num = {1,2,3};
-        System.out.println(new SubSets().subsets(num));
+        int[]  num1 = {5,5, 5, 5, 5, 5, 5, 5, 0, 5, 5};
+         System.out.println(new SubSets().subsets(num1).size());
+
     }
 }

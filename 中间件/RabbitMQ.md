@@ -25,7 +25,8 @@ C:\Users\Lenovo\IdeaProjects\itcast-rabbitmq
         // 把上面第二个参数置为false 手动进行ACK 在消费函数执行末尾加一句
         channel.basicAck(envelope.getDeliveryTag(), false);
         若有异常 不会拿出消息
-    2.工作模型
+
+    2.工作模型 [高并发情况下,默认会产生某一个消息被多个消费者共同使用,可以设置一个开关(syncronize,与同步锁的性能不一样) 保证一条消息只能被一个消费者使用)]
         1.创建工作队列，在多个工作者之间分配耗时任务 以免内存中积累过多任务导致溢出
         2.设计两个消费者，一个处理快，一个处理慢 若无设置 两个消费者会处理同样多的消息
         // 设置每个消费者同时只能处理一条消息
@@ -46,7 +47,7 @@ C:\Users\Lenovo\IdeaProjects\itcast-rabbitmq
 
             一个交换机 多个队列 一个channel创建一个队列 一个队列可以绑定多个key 
             
-            1.广播 fanout
+            1.广播 fanout [一个消息可以被多个消费者获取]
                 1.send创建了交换机 recv创建队列并绑定交换机 若先启动send 由于交换机不会存储
             消息，所以第一条消息会被丢弃 
 

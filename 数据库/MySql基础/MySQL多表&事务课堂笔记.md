@@ -412,7 +412,7 @@
 
 			* 注意：隔离级别从小到大安全性越来越高，但是效率越来越低
 			* 数据库查询隔离级别：
-				* select @@tx_isolation;
+				* select @@tx_isolation; 
 			* 数据库设置隔离级别：
 				* set global transaction isolation level  级别字符串;
 
@@ -423,7 +423,16 @@
 			update account set balance = balance - 500 where id = 1;
 			update account set balance = balance + 500 where id = 2;
 
+## 数据库引擎
+	1.是否支持行级锁 : MyISAM 只有表级锁(table-level locking)，而InnoDB 支持行级锁(row-level locking)和表级锁,默认为行级锁。
+	2.是否支持事务和崩溃后的安全恢复： MyISAM 强调的是性能，每次查询具有原子性,其执行速度比InnoDB类型更快，但是不提供事务支持。但是InnoDB 提供事务支持事务，外部键等高级数据库功能。 具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表。
+	3.是否支持外键： MyISAM不支持，而InnoDB支持。
+	4.是否支持MVCC ：仅 InnoDB 支持。应对高并发事务, MVCC比单纯的加锁更高效;MVCC只在 READ COMMITTED 和 REPEATABLE READ 两个隔离级别下工作;MVCC可以使用 乐观(optimistic)锁 和 悲观(pessimistic)锁来实现;各数据库中MVCC实现并不统一。
 
+## 性能优化
+	1.读写分离 主库写 从库读
+	2.垂直拆分  即把一张表根据列 拆成多个小表
+	3.水平分区 行数太多时使用 把一个用户信息表分成多个用户信息表
 
 ## DCL：
 	* SQL分类：

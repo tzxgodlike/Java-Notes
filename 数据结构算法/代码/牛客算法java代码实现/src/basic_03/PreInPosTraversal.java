@@ -2,6 +2,7 @@ package basic_03;
 
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -47,6 +48,8 @@ public class PreInPosTraversal {
     }
     //先序非递归 循环之前先把head压栈 再遍历 先放右子再放左子 非空时打印
     public static void preOrderUnRecur(Node head){
+        //ArrayList<Integer> list = new ArrayList<>();
+        //list.get()
         System.out.print("pre-order");
         if(head!=null){
             Stack<Node> stack = new Stack<>();

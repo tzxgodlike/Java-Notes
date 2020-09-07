@@ -26,27 +26,26 @@ public class ReConstructTree_07 {
      * @param inEnd   中序序列封闭区间的右指针
      * @return  树的根结点
      */
-    public static Node reConstructTree(int[] pre,int[] in){
-        if(pre==null||in==null){
-            return null;
-        }
-        Node root = reConstructTreeCore(pre,0,pre.length,in,0,in.length);
+    public Node buildTree(int[] preorder, int[] inorder) {
+        Node root = reConstructTree(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
         return root;
     }
 
-    public static Node reConstructTreeCore(int[] pre, int preStart, int preEnd, int[] in, int inStart, int inEnd) {
-        // 还有子数组就继续递归，不存在子数组了（表现为end > start）,就返回空子树给父结点
-        if (preStart > preEnd || inStart > inEnd) {
+    public Node reConstructTree(int[] pre, int preS,int preE,int[] in,int inS,int inE) {
+        if (preS > preE||inS>inE ) {
             return null;
         }
-        int rootVal = pre[preStart];
-        Node root = new Node(rootVal);
-        for (int i = inStart;i<=inEnd;i++){
-            if (in[i]==rootVal){
-                root.left = reConstructTreeCore(pre,preStart+1,preStart+i-inStart,in,inStart,i-1);
-                root.right =reConstructTreeCore(pre, preStart + i - inStart + 1, preEnd, in, i + 1, inEnd);
+        Node root = new Node(pre[preS]);  //先把根节点赋值
+        for (int i  = inS;i<=inE;i++)  {//再去中序遍历中找这个根节点的index 
+            if (in[i]==pre[preS]) {
+                //找出左子树的前序和中序坐标范围
+                root.left = reConstructTree(pre,preS+1,preS+i-inS,in,inS,i-1);
+                //出错在右子树的前序起始坐标就为左子树的前序末尾+1 前序末尾坐标就为该次前序数组的末尾坐标
+                root.right = reConstructTree(pre,preS+i-inS+1,preE,in,i+1,inE);
             }
         }
         return root;
     }
+
+
 }

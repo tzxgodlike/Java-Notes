@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LongestSubstringWithoutRepeatingCharacters {
+public class
+LongestSubstringWithoutRepeatingCharacters {
     /*
     无重复字符的最长子串  leetcode.3
     * */

@@ -37,8 +37,8 @@ public class CuttingRope_14 {
      */
     public static int max2(int n) {
         if (n<2) return 0;
-        if (n==2) return 2;
-        if (n==3) return 3;
+        if (n==2) return 1;
+        if (n==3) return 2;
 
         int timesOf3 = n/3;
         //最后有4的时候 不能减3

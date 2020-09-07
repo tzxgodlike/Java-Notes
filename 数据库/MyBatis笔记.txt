@@ -1,0 +1,202 @@
+MyBatis   https://mybatis.org/mybatis-3/zh/sqlmap-xml.html
+    
+1.ResultMap可以自定义 来进行列名和类属性名的匹配
+
+2.<!-- 非常复杂的语句 -->
+<select id="selectBlogDetails" resultMap="detailedBlogResultMap">
+  select
+       B.id as blog_id,
+       B.title as blog_title,
+       B.author_id as blog_author_id,
+       A.id as author_id,
+       A.username as author_username,
+       A.password as author_password,
+       A.email as author_email,
+       A.bio as author_bio,
+       A.favourite_section as author_favourite_section,
+       P.id as post_id,
+       P.blog_id as post_blog_id,
+       P.author_id as post_author_id,
+       P.created_on as post_created_on,
+       P.section as post_section,
+       P.subject as post_subject,
+       P.draft as draft,
+       P.body as post_body,
+       C.id as comment_id,
+       C.post_id as comment_post_id,
+       C.name as comment_name,
+       C.comment as comment_text,
+       T.id as tag_id,
+       T.name as tag_name
+  from Blog B
+       left outer join Author A on B.author_id = A.id
+       left outer join Post P on B.id = P.blog_id
+       left outer join Comment C on P.id = C.post_id
+       left outer join Post_Tag PT on PT.post_id = P.id
+       left outer join Tag T on PT.tag_id = T.id
+  where B.id = #{id}
+</select>
+
+<!-- 非常复杂的结果映射 -->                   
+<resultMap id="detailedBlogResultMap" type="Blog">
+  <constructor>
+    <idArg column="blog_id" javaType="int"/>
+  </constructor>
+  <result property="title" column="blog_title"/>
+  <association property="author" javaType="Author">
+  <!--id 和result标签都是属性标签-->
+    <id property="id" column="author_id"/>
+    <result property="username" column="author_username"/>
+    <result property="password" column="author_password"/>
+    <result property="email" column="author_email"/>
+    <result property="bio" column="author_bio"/>
+    <result property="favouriteSection" column="author_favourite_section"/>
+  </association>
+  <collection property="posts" ofType="Post">
+    <id property="id" column="post_id"/>
+    <result property="subject" column="post_subject"/>
+    <association property="author" javaType="Author"/>
+    <collection property="comments" ofType="Comment">
+      <id property="id" column="comment_id"/>
+    </collection>
+    <collection property="tags" ofType="Tag" >
+      <id property="id" column="tag_id"/>
+    </collection>
+    <discriminator javaType="int" column="draft">
+      <case value="1" resultType="DraftPost"/>
+    </discriminator>
+  </collection>
+</resultMap>
+
+其中A是作者表 B是blog表  根据blog_id来查A表的作者信息
+    <association property="author" column="blog_author_id" javaType="Author">
+      <id property="id" column="author_id"/>
+      <result property="username" column="author_username"/>
+    </association>
+
+    一个示例  嵌套的select resultMap只要一个
+    <resultMap id="blogResult" type="Blog">
+      <association property="author" column="author_id" javaType="Author" select="selectAuthor"/>
+    </resultMap>
+
+    <select id="selectBlog" resultMap="blogResult">
+      SELECT * FROM BLOG WHERE ID = #{id}
+    </select>
+
+    <select id="selectAuthor" resultType="Author">
+      SELECT * FROM AUTHOR WHERE ID = #{id}
+    </select>
+ 
+另一个示例  用一个select 但是resultMap就要嵌套了
+
+    <select id="selectBlog" resultMap="blogResult">
+      select
+        B.id            as blog_id,
+        B.title         as blog_title,
+        B.author_id     as blog_author_id,
+        A.id            as author_id,
+        A.username      as author_username,
+        A.password      as author_password,
+        A.email         as author_email,
+        A.bio           as author_bio
+      from Blog B left outer join Author A on B.author_id = A.id
+      where B.id = #{id}
+    </select>
+
+
+    <resultMap id="blogResult" type="Blog">
+      <id property="id" column="blog_id" />
+      <result property="title" column="blog_title"/>
+      <association property="author" column="blog_author_id" javaType="Author" resultMap="authorResult"/>
+    </resultMap>
+
+    <resultMap id="authorResult" type="Author">
+      <id property="id" column="author_id"/>
+      <result property="username" column="author_username"/>
+      <result property="password" column="author_password"/>
+      <result property="email" column="author_email"/>
+      <result property="bio" column="author_bio"/>
+    </resultMap>
+
+    这么理解 
+        BLOG{
+            id；
+            title;
+            author;
+        }
+    这样一来 authorResult的查询结果可以重用  如果不想重用  可以使用等效的<resultMap id="blogResult" type="Blog">
+      <id property="id" column="blog_id" />
+      <result property="title" column="blog_title"/>
+      <association property="author" javaType="Author">
+        <id property="id" column="author_id"/>
+        <result property="username" column="author_username"/>
+        <result property="password" column="author_password"/>
+        <result property="email" column="author_email"/>
+        <result property="bio" column="author_bio"/>
+      </association>
+    </resultMap>
+
+如果一个blog有一个共同作者咋办 ？？？
+
+
+ BLOG和AUTHOR是一对一 BLOG和POST（文章）是一对多 所以用collection 
+ 
+ 在实体类中表现为
+ BLOG{
+        id；
+        title;
+        author;
+        List<Post> posts;
+    }
+
+一个实例 嵌套的select查询
+    <resultMap id="blogResult" type="Blog">
+      <collection property="posts" javaType="ArrayList" column="id" ofType="Post" select="selectPostsForBlog"/>
+    </resultMap>
+
+    <select id="selectBlog" resultMap="blogResult">
+      SELECT * FROM BLOG WHERE ID = #{id}
+    </select>
+
+    <select id="selectPostsForBlog" resultType="Post">
+      SELECT * FROM POST WHERE BLOG_ID = #{id}
+    </select>
+
+另外一个实例 集合的结果嵌套映射
+
+    sql为
+    <select id="selectBlog" resultMap="blogResult">
+      select
+      B.id as blog_id,
+      B.title as blog_title,
+      B.author_id as blog_author_id,
+      P.id as post_id,
+      P.subject as post_subject,
+      P.body as post_body,
+      from Blog B
+      left outer join Post P on B.id = P.blog_id
+      where B.id = #{id}
+    </select>
+
+    嵌套的
+    <resultMap id="blogResult" type="Blog">
+      <id property="id" column="blog_id" />
+      <result property="title" column="blog_title"/>
+      <collection property="posts" ofType="Post">
+        <id property="id" column="post_id"/>
+        <result property="subject" column="post_subject"/>
+        <result property="body" column="post_body"/>
+      </collection>
+    </resultMap>
+    可重用的结果映射
+    <resultMap id="blogResult" type="Blog">
+      <id property="id" column="blog_id" />
+      <result property="title" column="blog_title"/>
+      <collection property="posts" ofType="Post" resultMap="blogPostResult" columnPrefix="post_"/>
+    </resultMap>
+
+    <resultMap id="blogPostResult" type="Post">
+      <id property="id" column="id"/>
+      <result property="subject" column="subject"/>
+      <result property="body" column="body"/>
+    </resultMap>
