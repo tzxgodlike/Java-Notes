@@ -45,7 +45,7 @@
         #rabbit相关配置
         rabbitmq:
             host: localhost
-            port: 5672
+            port: 5672  
             username: guest
             password: guest
 
