@@ -25,4 +25,4 @@ https://blog.csdn.net/AlphaWun/article/details/92383416?depth_1-utm_source=distr
 https://blog.csdn.net/u012337114/article/details/81317992 Java String + 拼接字符串原理
 String字符串拼接通过StringBuilder走中间过程，通过append方法实现
 null拼接会变成字符串"null"
-程序有大量字符串拼接时，建议考虑直接写StringBuilder实现，就不需要底层new很多临时sb对象了。
+程序有大量字符串拼接时，建议考虑直接写StringBuilder实现，就不需要底层new很多临时sb对象了。因为直接String + 会产生很多个sb对象 不如直接用一个 调用方法就行 

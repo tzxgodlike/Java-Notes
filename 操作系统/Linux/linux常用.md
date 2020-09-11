@@ -4,3 +4,4 @@
     3.iotop  显示有IO行为的进程
     4.pidstat 展示I/O统计，每秒更新一次
     5.top 类似于windows中的任务管理器
+    	会显示PID 进程信息 CPU占比 内存占比

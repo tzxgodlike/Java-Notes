@@ -37,7 +37,7 @@ https://www.cnblogs.com/jasonZh/p/9513948.html
         sdiff(a,b) 求差集 在a中且不再b中
         sunion(a,b)求并集
 
-4.有序集合 zset
+4.有序集合 zset  跳表和hashtable  查找是O(1)　插入　删除　是logn
     1.包含了列表和集合的特性 每个string对应一个score来排序
     2.命令 zadd key score member
     3.场景：
@@ -124,3 +124,5 @@ https://www.cnblogs.com/jasonZh/p/9513948.html
         1.AOF持久化方式记录每次对服务器写的操作,当服务器重启的时候会重新执行这些命令来恢复原始的数据,AOF命令以redis协议追加保存每次写的操作到文件末尾.Redis还能对AOF文件进行后台重写,使得AOF文件的体积不至于过大。
         2.如果你只希望你的数据在服务器运行的时候存在,你也可以不使用任何持久化方式。
         3.你也可以同时开启两种持久化方式, 在这种情况下, 当redis重启的时候会优先载入AOF文件来恢复原始的数据,因为在通常情况下AOF文件保存的数据集要比RDB文件保存的数据集要完整。
+
+

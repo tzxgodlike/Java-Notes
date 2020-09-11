@@ -4,6 +4,32 @@
     对象中 即每个线程都有该对象的独立拷贝
     ThreadLocal具有线程隔离的效果，只有在线程内才能获取到对应的值，线程外则不能访问到想要的值。
 
+     1.<key,value> 中key是弱引用 会被回收 value 是强引用  不会被回收 出现内存泄漏
+
+        2.key为ThreahLocal变量 value为set的变量副本
+
+        3.为什么key是弱引用 value强引用？
+
+            1.当ThreahLocal被回收的时候 强引用使得map里面的key不会被回收
+
+            2.如果value是弱引用 那么其他线程回收ob 会让value变为null
+         
+    2.理解
+
+        1.场景1 
+        假设有I一个方法是线程安全有问题的
+        使用synchronized的话，表示当前只有1个线程才能访问方法，其他线程都会被阻塞。当访问的线程也阻塞的时候，
+        其他所有访问该方法的线程全部都会阻塞，这个方法相当地 "耗时"。
+        使用ThreadLocal的话，表示每个线程的本地变量中都有SimpleDateFormat这个实例的引用，也就是各个线程之间完全没有关系，也就不存在同步问题了。
+
+        综合来说：使用synchronized是一种 "以时间换空间"的概念， 而使用ThreadLocal则是 "以空间换时间"的概念。
+
+        2. 场景2
+            传递参数 在一个请求线程中 参数共享 
+            在不同的请求线程中 参数不共享
+
+            也就是说A B C 三个方法都共享这些参数 而不用在方法括号中传参
+
     2.在每个线程Thread内部有一个ThreadLocal.ThreadLocalMap类型的成员变量
     t.threadLocals，这个threadLocals就是用来存储实际的变量副本的，键值为当前
     ThreadLocal变量，value为变量副本（即要保存的变量）。
